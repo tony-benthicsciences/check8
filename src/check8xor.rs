@@ -24,9 +24,9 @@ SOFTWARE.
 
 */
 
+//! # Check8Xor
 //
-// An 8-bit XOR sum checksum type with tests, implements Check8 trait
-//
+//! An 8-bit XOR sum checksum type with tests, implements Check8 trait
 
 use crate::Check8;          // for the Check8 trait
 
@@ -34,6 +34,27 @@ pub struct Check8Xor
 {
     accum: u8,
 }
+
+/// # Provided Methods
+///
+/// - new: Creates a new instance of the type.
+/// - get_accum: Retrieves the current value of the accumulator.
+/// - init: Initializes the accumulator with a given value and returns the initialized value.
+/// - add: Adds a given value to the accumulator using the appropriate algorithm and returns the updated value.
+///
+/// # Examples
+///
+/// ```rust
+/// use crate::check8::{Check8, Check8Xor};
+/// fn main() {
+///     let mut sum = Check8Xor::new();
+///     sum.init(0x01);
+///     let result = sum.add(0x07);
+///     assert_eq!(result, 0x06);
+///     assert_eq!(sum.get_accum(), 0x06);
+/// }
+/// ```
+///
 
 impl Check8 for Check8Xor
 {
@@ -69,15 +90,34 @@ impl Check8 for Check8Xor
 
 #[cfg(test)]
 mod tests {
-    use crate::Check8;
-    use crate::check8xor::Check8Xor;
+    use super::*;
+
+    #[test]
+    fn new_returns_zero() {
+        let sum = Check8Xor::new();
+        assert_eq!(sum.get_accum(), 0)
+    }
 
     #[test]
     fn init_with_zero_returns_zero() {
         let mut sum = Check8Xor::new();
-        sum.init(255);
         let result = sum.init(0);
         assert_eq!(result, 0)
+    }
+
+    #[test]
+    fn init_with_value_returns_value() {
+        let mut sum = Check8Xor::new();
+        let result = sum.init(255);
+        assert_eq!(result, 255)
+    }
+
+    #[test]
+    fn add_returns_correct_result() {
+        let mut sum = Check8Xor::new();
+        sum.init(0x01);
+        let result = sum.add(0x07);
+        assert_eq!(result, 0x06)
     }
 
     #[test]

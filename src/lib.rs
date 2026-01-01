@@ -24,11 +24,38 @@ SOFTWARE.
 
 */
 
-//! a trait for 8-bit checksum types
+//! # Check8
+//!
+//! A library of 8-bit checksum types implementing the Check8 trait
 
 mod check8sum;  // implements Check8Sum - a simple arithmetic sum checksum type
 mod check8xor;  // implements Check8Xor - a simple XOR checksum type
 
+// re-export to make the provided implementation types available to the user
+pub use crate::check8sum::Check8Sum;
+pub use crate::check8xor::Check8Xor;
+
+///
+/// # Required Methods
+///
+/// - new: Creates a new instance of the type.
+/// - get_accum: Retrieves the current value of the accumulator.
+/// - init: Initializes the accumulator with a given value and returns the initialized value.
+/// - add: Adds a given value to the accumulator using the appropriate algorithm and returns the updated value.
+///
+/// # Provided Methods
+///
+/// - calculate_from_byte_array:
+///     Processes a slice of bytes by adding each byte's value to the accumulator using the add method.
+///     Finally, it retrieves the accumulated value using get_accum.
+///     - **Parameter**: array - A byte slice to process.
+///     - **Returns**: The final accumulated value as an u8.
+///
+/// - calculate_from_string:
+///     Converts a string to its byte representation and processes it using calculate_from_byte_array.
+///     - **Parameter**: string - A string whose byte representation is processed.
+///     - **Returns**: The final accumulated value as an u8.
+///
 
 pub trait Check8 {
     fn new() -> impl Check8;

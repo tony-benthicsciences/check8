@@ -24,18 +24,42 @@ SOFTWARE.
 
 */
 
+//! # Check8Sum
 //!
-//! An 8-bit arithmetic sum checksum type with tests, implements Check8 trait
-//!
+//! An 8-bit "wrapping" arithmetic sum checksum type with tests, implements Check8 trait
 
 use crate::Check8;          // for the Check8 trait
+
+// NOTE: we deliberately do not document the private fields
 
 pub struct Check8Sum
 {
     accum: u8,
 }
 
+/// # Provided Methods
+///
+/// - new: Creates a new instance of the type.
+/// - get_accum: Retrieves the current value of the accumulator.
+/// - init: Initializes the accumulator with a given value and returns the initialized value.
+/// - add: Adds a given value to the accumulator using the appropriate algorithm and returns the updated value.
+///
+/// # Examples
+///
+/// ```rust
+/// use crate::check8::{Check8, Check8Sum};
+/// fn main() {
+///     let mut sum = Check8Sum::new();
+///     sum.init(255);
+///     let result = sum.add(1);
+///     assert_eq!(result, 0);
+///     assert_eq!(sum.get_accum(), 0);
+/// }
+/// ```
+///
+
 impl Check8 for Check8Sum {
+
     fn new() -> impl Check8 {
         Check8Sum { accum: 0 }
     }
@@ -50,8 +74,7 @@ impl Check8 for Check8Sum {
     }
 
     fn add(&mut self, val: u8) -> u8 {
-        let(sum, _is_overflow) = self.accum.overflowing_add(val);
-        self.accum = sum;
+        self.accum = self.accum.wrapping_add(val);
         self.accum
     }
 
@@ -61,11 +84,23 @@ impl Check8 for Check8Sum {
 mod tests {
     use super::*;
     #[test]
+    fn new_returns_zero() {
+        let sum = Check8Sum::new();
+        assert_eq!(sum.get_accum(), 0)
+    }
+
+    #[test]
     fn init_with_zero_returns_zero() {
         let mut sum = Check8Sum::new();
-        sum.init(255);
         let result = sum.init(0);
         assert_eq!(result, 0)
+    }
+
+    #[test]
+    fn init_with_value_returns_value() {
+        let mut sum = Check8Sum::new();
+        let result = sum.init(255);
+        assert_eq!(result, 255)
     }
 
     #[test]
