@@ -37,17 +37,16 @@ pub struct Check8Xor
 
 /// # Provided Methods
 ///
-/// - new: Creates a new instance of the type.
-/// - get_accum: Retrieves the current value of the accumulator.
-/// - init: Initializes the accumulator with a given value and returns the initialized value.
+/// - new: Creates a new instance of the type, initialises the accumulator.
+/// - init: Initialises the accumulator with a given value and returns the initialised value.
 /// - add: Adds a given value to the accumulator using the appropriate algorithm and returns the updated value.
 ///
 /// # Examples
-///
+//s
 /// ```rust
 /// use crate::check8::{Check8, Check8Xor};
 /// fn main() {
-///     let mut sum = Check8Xor::new();
+///     let mut sum = Check8Xor::new(0x00);
 ///     sum.init(0x01);
 ///     let result = sum.add(0x07);
 ///     assert_eq!(result, 0x06);
@@ -58,8 +57,8 @@ pub struct Check8Xor
 
 impl Check8 for Check8Xor
 {
-    fn new() -> impl Check8 {
-        Check8Xor { accum: 0 }
+    fn new(initial: u8) -> impl Check8 {
+        Check8Xor { accum: initial }
     }
 
     fn get_accum(&self) -> u8 {
@@ -93,28 +92,28 @@ mod tests {
     use super::*;
 
     #[test]
-    fn new_returns_zero() {
-        let sum = Check8Xor::new();
-        assert_eq!(sum.get_accum(), 0)
+    fn new_sets_initial() {
+        let sum = Check8Xor::new(10);
+        assert_eq!(sum.get_accum(), 10)
     }
 
     #[test]
     fn init_with_zero_returns_zero() {
-        let mut sum = Check8Xor::new();
+        let mut sum = Check8Xor::new(0);
         let result = sum.init(0);
         assert_eq!(result, 0)
     }
 
     #[test]
     fn init_with_value_returns_value() {
-        let mut sum = Check8Xor::new();
+        let mut sum = Check8Xor::new(0);
         let result = sum.init(255);
         assert_eq!(result, 255)
     }
 
     #[test]
     fn add_returns_correct_result() {
-        let mut sum = Check8Xor::new();
+        let mut sum = Check8Xor::new(0);
         sum.init(0x01);
         let result = sum.add(0x07);
         assert_eq!(result, 0x06)
@@ -130,7 +129,7 @@ mod tests {
             expected ^= *val;
         }
 
-        let mut sum = Check8Xor::new();
+        let mut sum = Check8Xor::new(0);
         let result = sum.calculate_from_byte_array(&test_array);
         assert_eq!(result, expected)
     }
@@ -145,7 +144,7 @@ mod tests {
             expected ^= *val;
         }
 
-        let mut sum = Check8Xor::new();
+        let mut sum = Check8Xor::new(0);
         let result = sum.calculate_from_string("hello");
         assert_eq!(result, expected)
     }

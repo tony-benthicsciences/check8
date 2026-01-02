@@ -40,7 +40,7 @@ pub use crate::check8xor::Check8Xor;
 ///
 /// - new: Creates a new instance of the type.
 /// - get_accum: Retrieves the current value of the accumulator.
-/// - init: Initializes the accumulator with a given value and returns the initialized value.
+/// - init: Initialises the accumulator with a given value and returns the initialised value.
 /// - add: Adds a given value to the accumulator using the appropriate algorithm and returns the updated value.
 ///
 /// # Provided Methods
@@ -69,11 +69,11 @@ pub use crate::check8xor::Check8Xor;
 /// fn main()  {
 ///     let test_string = "hello";
 ///
-///     let mut sum_add = Check8Sum::new();
+///     let mut sum_add = Check8Sum::new(0);
 ///     let result_add = calculate_from_string_with_type_as_parameter(test_string, &mut sum_add);
 ///     println!("{}, 8-bit Arithmetic Checksum: {:#04x}", test_string, result_add);
 ///
-///     let mut sum_xor = Check8Xor::new();
+///     let mut sum_xor = Check8Xor::new(0);
 ///     let result_xor = calculate_from_string_with_type_as_parameter(test_string, &mut sum_xor);
 ///     println!("{}, 8-bit XOR Checksum: {:#04x}", test_string, result_xor);
 ///     assert!(result_add != result_xor);
@@ -82,7 +82,7 @@ pub use crate::check8xor::Check8Xor;
 ///
 
 pub trait Check8 {
-    fn new() -> impl Check8;
+    fn new(initial: u8) -> impl Check8;
     fn get_accum(&self) -> u8;
     fn init(&mut self, val: u8) -> u8;
     fn add(&mut self, val: u8) -> u8;
@@ -137,11 +137,11 @@ mod tests {
         }
         expected_sum %= 256;
 
-        let mut sum_add = Check8Sum::new();
+        let mut sum_add = Check8Sum::new(0);
         let result_add = calculate_from_string_with_type_as_parameter(test_string, &mut sum_add);
         assert_eq!(result_add, expected_sum as u8);
 
-        let mut sum_xor = Check8Xor::new();
+        let mut sum_xor = Check8Xor::new(0);
         let result_xor = calculate_from_string_with_type_as_parameter(test_string, &mut sum_xor);
         assert_eq!(result_xor, expected_xor);
     }
