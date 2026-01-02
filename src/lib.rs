@@ -30,10 +30,12 @@ SOFTWARE.
 
 mod check8sum;  // implements Check8Sum - a simple arithmetic sum checksum type
 mod check8xor;  // implements Check8Xor - a simple XOR checksum type
+mod check8crc;  // implements Check8Crc - an 8-bit CRC checksum type
 
 // re-export to make the provided implementation types available to the user
 pub use crate::check8sum::Check8Sum;
 pub use crate::check8xor::Check8Xor;
+pub use crate::check8crc::Check8Crc;
 
 ///
 /// # Required Methods
